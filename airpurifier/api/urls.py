@@ -1,6 +1,8 @@
-from django.urls import path
-from . import views
+from django.conf.urls import url
+from .views import DustViewSet
+
+dust_list = DustViewSet.as_view({"get" : "list", "post" : "create"})
 
 urlpatterns = [
-    path('', views.status, name = 'status'),
+    url("^dusts/$", dust_list, name="dust-list"),
 ]
