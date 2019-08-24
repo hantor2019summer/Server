@@ -1,8 +1,8 @@
 from django.http import JsonResponse, HttpResponse
 from django.core import serializers
 from rest_framework import viewsets
-from .serializers import DustSerializer
-from .models import Fine_Dust
+from .serializers import *
+from .models import *
 from django.shortcuts import render
 
 # Create your views here.
@@ -19,6 +19,22 @@ class DustViewSet(viewsets.ModelViewSet):
 
     def create(self, request):
         serializer = DustSerializer(data=request.data)
+
+        if(serializer.is_valid()):
+            serializer.save()
+            return JsonResponse({'status': True, 'details': 'Success'}, safe=False)
+        else:
+            return JsonResponse({'status': False, 'details': 'serializer is not valid'}, safe=False)
+
+class SchViewSet(viewsets.ModelViewSet):
+    serializer_class = SchSerializer
+    queryset = SwitchLog.objects.all().order_by("-id")[:10]
+
+    def list(self, request):
+        return super().list(request)
+
+    def create(self, request):
+        serializer = SchSerializer(data=request.data)
 
         if(serializer.is_valid()):
             serializer.save()
